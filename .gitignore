@@ -1,2 +1,7 @@
 .idea/
 Company.iml
+starter/starter.iml
+common/common.iml
+application/application.iml
+web/web.iml
+store/store.iml
