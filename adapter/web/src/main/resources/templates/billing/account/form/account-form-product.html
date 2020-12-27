@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{billing/layout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Billing</title>
+</head>
+<body>
+<div layout:fragment="~{content}">
+    <div th:with="disabled = ${true}">
+        <form th:action="@{/billing/account/product}" th:object="${account}" class="form-horizontal" method="post">
+            <div class="breadcrumb-holder">
+                <div class="container-fluid">
+                    <div th:if="${state == 'VIEW'}">
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                            <li class="breadcrumb-item active">View Product Account       </li>
+                            <li class="breadcrumb-item"><a th:href="@{'/billing/account/view/'+${account.id}+'/purchaseorder'}">View Purchase Order Account</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{'/billing/account/view/'+${account.id}+'/performance'}">View Performance Account</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <fieldset>
+                <div class="col-lg-12 mb-5">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="h6 text-uppercase mb-0">Product Account</h3>
+                        </div>
+                        <div class="card-body">
+                            <input type="hidden" name="state" th:value="${state}">
+                            <input type="hidden" name="id" th:field="*{id}">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                                <p th:each="e : ${#fields.detailedErrors()}" >
+                                    <span th:text="${#strings.capitalize(e.fieldName)}">The field name</span> :
+                                    <span th:text="${e.message}">The error message</span>
+                                </p>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-1">
+                                                <label class="form-control-label">Date Created</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" th:disabled="true" th:field="*{date}" placeholder="Date Created"  class="form-control form-control-sm">
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label class="form-control-label">Name</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" th:disabled="true" th:value="SYSTEM" placeholder="Creator"  class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <label class="form-control-label">Aggregate Amount</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" th:disabled="true" th:field="*{aggregateAmount}" placeholder="Aggregate Amount"  class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label class="form-control-label">Type Count</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" th:disabled="true" th:field="*{typeCount}" placeholder="Count of entries"  class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label class="form-control-label">Kind</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select th:disabled="${disabled}" th:field="*{kind}" class="form-control" id="kind">
+                                            <div th:each="loadKind : ${loadedKind}">
+                                                <option th:value="${loadKind}"><span th:text="${loadKind}"></span></option>
+                                            </div>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-control-label">Type</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select th:disabled="${disabled}" th:field="*{type}" class="form-control" id="type">
+                                            <div th:each="loadType : ${loadedType}">
+                                                <option th:value="${loadType}"><span th:text="${loadType}"></span></option>
+                                            </div>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+    </form>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+
+spring:
+  profiles:
+    active: dev
+  main:
+    banner-mode: log
+    log-startup-info: false
+  thymeleaf.mode: HTML
+  servlet:
+    multipart:
+      max-file-size: 1024KB
+      max-request-size: 1024KB
+
+
+server.port: 9999
+
+#user defined properties
+company:
+  productTypes:
+    - Car
+    - Aeroplane
+    - Air Condition
+    - Gas Cooker
+  currency: USD

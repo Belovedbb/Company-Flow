@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE">Company Flow</title>
+    <link href="webjars/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" th:href="@{plugin/scrollbar/jquery.mCustomScrollbar.css}" type="text/css">
+    <link th:rel="stylesheet" th:href="@{webjars/font-awesome/5.13.0/css/all.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{css/main.css}" id="theme-stylesheet" type="text/css">
+</head>
+<body>
+<div sec:authorize="isAuthenticated()">
+    <div class="page">
+        <div th:replace="global/side-bar :: side-bar-frag"></div>
+        <div th:replace="~{global/header :: header-frag}"></div>
+        <section  layout:fragment="~{content}">
+            Company Layout
+        </section>
+        <div th:replace="~{global/footer :: footer-frag}"></div>
+    </div>
+</div>
+<div sec:authorize="not isAuthenticated()">
+    <p>
+        <a th:href="@{/login}">Login</a>
+    </p>
+</div>
+
+<script th:src="@{webjars/jquery/3.0.0/jquery.min.js}"></script>
+<script th:src="@{webjars/bootstrap/4.4.1/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{plugin/scrollbar/jquery.mCustomScrollbar.concat.min.js}"></script>
+<script th:src="@{plugin/messenger-hubspot/build/js/messenger.min.js}"></script>
+<script th:src="@{plugin/chart.js/Chart.min.js}"></script>
+<script th:src="@{js/home-premium.js}"> </script>
+<script th:src="@{js/front.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var data = /*[[${pictureData}]]*/ '';
+    var mimeType = /*[[${pictureType}]]*/ '';
+    var image = document.getElementById('profilePicture');
+    image.src = 'data:'+mimeType+';base64,'+ data;
+    /*]]>*/
+</script>
+<script th:inline="javascript">
+    //dashboard data
+  /*<![CDATA[*/
+    var summaryData = [[${summaryChartData}]];
+    var summaryDataMonth = summaryData[0];
+    var summaryDataYear = summaryData[1];
+
+     var productData = [[${detailedProductData}]];
+     var productDataYear = productData[0];
+     var productDataStatus = productData[1];
+
+     var orderData = [[${detailedOrderData}]];
+     var orderDataYear = orderData[0];
+     var orderDataStatus = orderData[1];
+
+  /*]]>*/
+</script>
+<script th:src="@{js/dashboard.js}"></script>
+</body>
+</html>

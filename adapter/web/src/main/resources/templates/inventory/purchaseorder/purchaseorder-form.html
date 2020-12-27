@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{inventory/layout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Inventory</title>
+</head>
+<body>
+<div layout:fragment="~{content}">
+    <div class="breadcrumb-holder">
+        <div class="container-fluid">
+            <div th:if="${state == 'VIEW'}">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{'/inventory/purchase/order/edit/'+${purchaseOrder.id}}">Edit Purchase Order</a></li>
+                    <li class="breadcrumb-item active">View Purchase Order       </li>
+                </ul>
+            </div>
+            <div th:if="${state == 'EDIT'}">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{'/inventory/purchase/order/view/'+${purchaseOrder.id}}">View Purchase Order</a></li>
+                    <li class="breadcrumb-item active">Edit Purchase Order       </li>
+                </ul>
+            </div>
+            <div th:if ="${state == 'NEW'}">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                    <li class="breadcrumb-item active">New Purchase Order       </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <fieldset>
+        <div class="col-lg-12 mb-5">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="h6 text-uppercase mb-0">Purchase Order</h3>
+                </div>
+                <div class="card-body">
+                    <div th:with="disabled = ${state == 'VIEW'}">
+                        <form id="purchase-order-form" th:action="@{/inventory/purchase/order}" th:object="${purchaseOrder}" class="form-horizontal" method="post">
+                            <input type="hidden" name="state" th:value="${state}">
+                            <input type="hidden" name="id" th:value="${purchaseOrder.id}">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                                <p th:each="e : ${#fields.detailedErrors()}" >
+                                    <span th:text="${#strings.capitalize(e.fieldName)}">The field name</span> :
+                                    <span th:text="${e.message}">The error message</span>
+                                </p>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label class="form-control-label">Description</label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <textarea class="form-control z-depth-1" th:disabled="${disabled}" th:field="*{description}"  rows="3" placeholder="Enter description here..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="checkbox-inline">
+                                            <input th:disabled="${disabled}" th:field="*{hasVat}" type="checkbox" > VAT Rate
+                                        </label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-control-label">Purchased Date</label>
+                                    </div>
+                                    <div class='col-md-2 input-group date datetimepicker'>
+                                        <input type='text' th:disabled="${disabled}" th:field="*{purchasedDate}" placeholder="Purchased Date" class="form-control datetimepicker-cursor form-control-sm" />
+                                        <span class="input-group-addon" >
+                                            <span class="fa fa-calendar datetimepicker-glyph"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label class="form-control-label">Total Quantity</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="number" id="total_quantity" readonly th:field="*{quantity}" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-control-label">Total Amount</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="number" id="total_amount" readonly th:field="*{amount}" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <h5 class="mx-auto w-25 p-1 bg-secondary text-white text-center py-2 ">Inventory Products</h5>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <select th:disabled="${disabled}" multiple="multiple" class="form-control" id="purchase-order-product-list" name="select-list">
+                                            <div th:each="availableProduct : ${availableProducts}">
+                                                <option th:value="${availableProduct.id}"><span th:text="${availableProduct.name + '(' + availableProduct.quantity + ')'}"></span></option>
+                                            </div>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <table class="table table-bordered table-responsive-md table-striped text-center">
+                                            <thead>
+                                            <tr >
+                                                <th width="20%" class="text-center">#</th>
+                                                <th width="20%" class="text-center">Product Name</th>
+                                                <th width="20%" class="text-center">Product Quantity</th>
+                                                <th width="20%" class="text-center">Order Amount</th>
+                                                <th width="20%" class="text-center">Order Quantity</th>
+                                            </tr>
+                                        </table>
+                                        <div style="height:170px;overflow:auto;">
+                                            <table class="table table-bordered table-responsive-md table-striped text-center entries-table" style="">
+                                                <tbody id="purchase-order-current-products">
+                                                <div th:fragment="result" th:each="entry, entryStatus: ${purchaseOrder.purchaseOrderEntries}">
+                                                    <input type="hidden" th:field="${purchaseOrder.purchaseOrderEntries[__${entryStatus.index}__].product.id}">
+                                                    <input type="hidden" th:field="${purchaseOrder.purchaseOrderEntries[__${entryStatus.index}__].id}">
+                                                    <tr>
+                                                        <td width="20%" style="max-width:30px; overflow:hidden; text-overflow:ellipsis; white-space: nowrap;" class="pt-3-half"></td>
+                                                        <td width="20%" style="max-width:30px; overflow:hidden; text-overflow:ellipsis; white-space: nowrap;" class="pt-3-half"><span th:text="${entry.product.name}"></span></td>
+                                                        <td width="20%" style="max-width:30px; overflow:hidden; text-overflow:ellipsis; white-space: nowrap;" class="pt-3-half"><span th:text="${entry.product.quantity}"></span></td>
+                                                        <td width="20%" style="max-width:30px; overflow:hidden; text-overflow:ellipsis; white-space: nowrap;" class="pt-3-half"><span class="order-amount-entry" th:text="${entry.orderAmount}"></span></td>
+                                                        <td width="20%" style="max-width:30px; overflow:hidden; text-overflow:ellipsis; white-space: nowrap;" class="pt-3-half order_quantity">
+                                                            <input onchange="order_entity_quantity_change(this);"  class="order-quantity-entry reduce-input-number form-control form-control-sm" type="number" step="0" min="0"
+                                                                   th:disabled="${disabled}" th:field="${purchaseOrder.purchaseOrderEntries[__${entryStatus.index}__].orderQuantity}"/>
+                                                        </td>
+                                                    </tr>
+                                                </div>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label class="form-control-label">Status</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select th:disabled="${disabled}" th:field="*{status}" class="form-control" id="status">
+                                            <div th:each="loadStatus : *{loadedStatus}">
+                                                <div>
+                                                    <option th:value="${loadStatus}"><span th:text="${loadStatus}"></span></option>
+                                                </div>
+                                            </div>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row" th:if="${!disabled}">
+                                <div class="text-left" >
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <span th:text="${state == 'NEW'? 'Save' : state == 'EDIT' ? 'Update' : 'Click' }">Click</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+</body>
+</html>

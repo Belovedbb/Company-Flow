@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{archive/layout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Archive</title>
+</head>
+<body>
+<div layout:fragment="~{content}">
+    <div class="breadcrumb-holder">
+        <div class="container-fluid">
+            <div th:if="${state == 'VIEW'}">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                    <li class="breadcrumb-item active">View Performance       </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <fieldset>
+        <div class="col-lg-12 mb-5">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="h6 text-uppercase mb-0">Performance</h3>
+                </div>
+                <div class="card-body">
+                    <div th:with="disabled = ${true}">
+                        <form th:action="@{/archive/performance}" th:object="${performance}" class="form-horizontal" method="post">
+                            <input type="hidden" name="state" th:value="${state}">
+                            <input type="hidden" name="id" th:field="*{id}">
+                            <input type="hidden" th:field="${performance.staff.id}">
+                            <input type="hidden" th:field="${performance.staff.userModel.id}">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                                <p th:each="e : ${#fields.detailedErrors()}" >
+                                    <span th:text="${#strings.capitalize(e.fieldName)}">The field name</span> :
+                                    <span th:text="${e.message}">The error message</span>
+                                </p>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-1">
+                                                <label class="form-control-label">Email</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" th:disabled="true" th:field="*{staff.userModel.email}" placeholder="Email  of Staff"  class="form-control form-control-sm">
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label class="form-control-label">Phone Number</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" th:disabled="true" th:field="*{staff.userModel.phoneNumber}" placeholder="Phone number of Staff"  class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <label class="form-control-label">Bonus Point</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" th:disabled="true" th:field="*{bonusPoint}" placeholder="Bonus Point"  class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label class="form-control-label">Average Monthly Performance</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" th:disabled="true" th:field="*{averageMonthlyPerformance}" placeholder="Average Monthly Performance"  class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <label class="form-control-label">Payment</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" th:disabled="${disabled}" th:field="*{staff.payment}" placeholder="Periodic Payment for Performance"  class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label class="form-control-label">Date</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" th:disabled="${disabled}" th:field="*{date}" placeholder="Date created"  class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-control-label">Status</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select th:disabled="${disabled}" th:field="*{status}" class="form-control" id="status">
+                                            <div th:each="loadStatus : *{loadedStatus}">
+                                                <option th:value="${loadStatus}"><span th:text="${loadStatus}"></span></option>
+                                            </div>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+</body>
+</html>

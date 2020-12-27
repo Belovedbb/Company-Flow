@@ -1,0 +1,14 @@
+
+debug: false
+trace: false
+
+spring:
+  main.lazy-initialization: true
+  thymeleaf.cache: true
+
+
+server:
+  compression:
+    enabled: true
+    mime-types: application/javascript,text/css,application/json
+

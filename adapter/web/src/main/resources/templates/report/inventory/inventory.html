@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<h1>Product</h1>
+<table  style="width: 100%;">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Quantity</th>
+        <th>Amount</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody >
+    <tr th:fragment="result" th:each="product, iter : ${products}">
+        <td><span th:text="${iter.index} + 1"></span></td>
+        <td><span th:text="${product.id}"></span></td>
+        <td><span th:text="${product.name}"></span></td>
+        <td><span th:text="${product.category}"></span></td>
+        <td><span th:text="${product.quantity}"></span></td>
+        <td><span th:text="${product.amount}"></span></td>
+        <td><span th:text="${product.status}"></span></td>
+    </tr>
+    </tbody>
+</table>
+<h1>Purchase Order</h1>
+<table  style="width: 100%;" >
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Id</th>
+        <th>Total Quantity</th>
+        <th>Total Amount</th>
+        <th>Description</th>
+        <th>Purchased Date</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody >
+    <tr th:fragment="result" th:each="order, iter : ${purchaseOrders}">
+        <td><span th:text="${iter.index} + 1"></span></td>
+        <td><span th:text="${order.id}"></span></td>
+        <td><span th:text="${order.quantity}"></span></td>
+        <td><span th:text="${order.amount}"></span></td>
+        <td><span th:text="${order.description}"></span></td>
+        <td><span th:text="${order.purchasedDate}"></span></td>
+        <td><span th:text="${order.status}"></span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

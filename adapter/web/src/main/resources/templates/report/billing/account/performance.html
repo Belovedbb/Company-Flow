@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<table  style="width: 100%;">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Id</th>
+        <th>Type</th>
+        <th>Date</th>
+        <th>Type Count</th>
+        <th>Aggregate Amount</th>
+    </tr>
+    </thead>
+    <tbody id="p_list_body">
+    <tr th:fragment="result" th:each="account, iter : ${performanceAccounts}">
+        <td><span th:text="${iter.index} + 1"></span></td>
+        <td><span th:text="${account.id}"></span></td>
+        <td><span th:text="${#strings.toLowerCase(account.type)}"></span></td>
+        <td><span th:text="${account.date}"></span></td>
+        <td><span th:text="${account.typeCount}"></span></td>
+        <td><span th:text="${account.aggregateAmount}"></span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

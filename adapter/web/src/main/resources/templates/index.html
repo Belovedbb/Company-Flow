@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Index Page</title>
+</head>
+<body>
+<div layout:fragment="~{content}">
+    <section class="dashboard-counts section-padding">
+        <div class="container-fluid">
+            <div class="row">
+                <div  th:each="summary : ${summaries}">
+                    <div class="col-xl-2 col-md-4 col-6">
+                        <div class="wrapper count-title d-flex">
+                            <div class="icon"><i class="icon-user"></i></div>
+                            <div class="name">
+                                <strong class="text-uppercase" th:text = "${summary.name}"></strong>
+                                <span th:text="${summary.periodText}"></span>
+                                <span class="count-number" th:text="${summary.count}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h2 class="h6 text-uppercase mb-0">Activity Summary</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-3 text-gray">Monthly </p>
+                        <div class="chart-holder">
+                            <canvas id="doughnutChartActivity"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h2 class="h6 text-uppercase mb-0">Process Summary</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-3 text-gray">Yearly </p>
+                        <div class="chart-holder">
+                            <canvas id="pieChartProcess"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Product-->
+        <div class="row mb-4">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="h6 mb-0 text-uppercase">Product Detail</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-5 text-gray">Product Count Per Month</p>
+                        <div class="chart-holder mt-5 mb-5">
+                            <canvas id="barChartProduct"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h2 class="h6 text-uppercase mb-0">Product Status</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-holder">
+                            <canvas id="pieChartProduct1"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Order-->
+        <div class="row mb-4">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="h6 mb-0 text-uppercase">Order Detail</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-5 text-gray">Order Count Per Month</p>
+                        <div class="chart-holder mt-5 mb-5">
+                            <canvas id="barChartOrder"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h2 class="h6 text-uppercase mb-0">Order Status</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-holder">
+                            <canvas id="pieChartOrder1"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<table  style="width: 100%;">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Payment</th>
+        <th>Bonus Point</th>
+        <th>AMP</th>
+        <th>Date</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody id="p_list_body">
+    <tr th:fragment="result" th:each="performance, iter : ${performances}">
+        <td><span th:text="${iter.index} + 1"></span></td>
+        <td><span th:text="${performance.staff.userModel.email}"></span></td>
+        <td><span th:text="${performance.staff.userModel.phoneNumber}"></span></td>
+        <td><span th:text="${performance.staff.payment}"></span></td>
+        <td><span th:text="${performance.bonusPoint}"></span></td>
+        <td><span th:text="${performance.averageMonthlyPerformance}"></span></td>
+        <td><span th:text="${performance.date}"></span></td>
+        <td><span th:text="${performance.status}"></span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

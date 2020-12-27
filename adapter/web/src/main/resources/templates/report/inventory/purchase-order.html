@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<table  style="width: 100%;" >
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Id</th>
+        <th>Total Quantity</th>
+        <th>Total Amount</th>
+        <th>Description</th>
+        <th>Purchased Date</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody >
+    <tr th:fragment="result" th:each="order, iter : ${purchaseOrders}">
+        <td><span th:text="${iter.index} + 1"></span></td>
+        <td><span th:text="${order.id}"></span></td>
+        <td><span th:text="${order.quantity}"></span></td>
+        <td><span th:text="${order.amount}"></span></td>
+        <td><span th:text="${order.description}"></span></td>
+        <td><span th:text="${order.purchasedDate}"></span></td>
+        <td><span th:text="${order.status}"></span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

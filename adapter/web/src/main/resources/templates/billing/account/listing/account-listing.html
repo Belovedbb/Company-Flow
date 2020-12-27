@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{billing/layout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Billing</title>
+</head>
+<body>
+<div layout:fragment="~{content}">
+    <div class="breadcrumb-holder">
+        <div class="container-fluid">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                <li class="breadcrumb-item active">Account Listing       </li>
+            </ul>
+        </div>
+    </div>
+    <fieldset>
+        <div class="col-lg-12 mb-5">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="h6 text-uppercase mb-0">Account Listing</h3>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <form th:action="@{/billing/account/listing}" id="filter_form" th:object="${account}" class="form-horizontal" method="post">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <label class="form-control-label">Name</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" name="name" th:field="*{type}"  placeholder="Name Of Product" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label class="form-control-label">Category</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" name="category" th:field="*{kind}"  placeholder="Category Of Product" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group account-listing">
+                        <div class="text-left">
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <button type="submit" id="filter_button" name="filter" class="btn btn-primary btn-sm" data-filter-listing-url="/filter">Filter</button>
+                                </div>
+                                <div class="col-md-1 ">
+                                    <button type="submit" id="clear_button" name="clear" class="btn btn-primary btn-sm">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="line-embed"></div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table  style="width: 100%;" class="table table-striped catalogue">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Id</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Type Count</th>
+                                <th>Aggregate Amount</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody id="p_list_body">
+                            <div >
+                                <tr th:fragment="result" th:each="account : ${accounts}">
+                                    <td></td>
+                                    <td><span th:text="${account.id}"></span></td>
+                                    <td><span th:text="${#strings.toLowerCase(account.type)}"></span></td>
+                                    <td><span th:text="${account.date}"></span></td>
+                                    <td><span th:text="${account.typeCount}"></span></td>
+                                    <td><span th:text="${account.aggregateAmount}"></span></td>
+                                    <td>
+                                        <div class="col-md-1">
+                                            <a th:href="@{'/billing/account/view/'+${account.id} + '/' +${#strings.toLowerCase(account.type)}}" id="view_button" class="btn btn-primary btn-sm active " role="button" aria-pressed="true">View</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+</body>
+</html>

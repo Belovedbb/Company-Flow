@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE">Company Flow</title>
+    <link th:href="@{/webjars/bootstrap/4.4.1/css/bootstrap.min.css}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" th:href="@{/plugin/scrollbar/jquery.mCustomScrollbar.css}">
+    <link th:rel="stylesheet" th:href="@{/plugin/datatables/css/datatables2.min.css}" >
+    <link th:rel="stylesheet" th:href="@{/plugin/multiselect/css/multi-select.css}" >
+    <link th:rel="stylesheet" th:href="@{/plugin/checkbox/css/dataTables.checkboxes.css}" >
+    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.13.0/css/all.css}"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap-glyphicons/bdd2cbfba0/css/bootstrap-glyphicons.css}"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap-datetimepicker/2.3.5/css/bootstrap-datetimepicker.min.css}"/>
+    <link th:rel="stylesheet" th:href="@{/css/main.css}" id="theme-stylesheet">
+</head>
+<body>
+<div sec:authorize="isAuthenticated()">
+    <div th:replace="/billing/side-bar :: side-bar-frag"></div>
+    <div class="page">
+        <div th:replace="~{/global/header :: header-frag}"></div>
+        <section  layout:fragment="~{content}">
+            Billing Layout
+        </section>
+        <div th:replace="~{/global/footer :: footer-frag}"></div>
+    </div>
+</div>
+<div sec:authorize="not isAuthenticated()">
+    <p>
+        <a th:href="@{/login}">Login</a>
+    </p>
+</div>
+
+<script type="text/javascript" th:src="@{/webjars/jquery/3.0.0/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/momentjs/2.24.0/min/moment.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap-datetimepicker/2.3.5/js/bootstrap-datetimepicker.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/4.4.1/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/plugin/scrollbar/jquery.mCustomScrollbar.concat.min.js}"></script>
+<script type="text/javascript" th:src="@{/plugin/datatables/js/datatables2.min.js}"></script>
+<script type="text/javascript" th:src="@{/plugin/multiselect/js/jquery.multi-select.js}"></script>
+<script type="text/javascript" th:src="@{/plugin/checkbox/js/dataTables.checkboxes.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/home-premium.js}"> </script>
+<script type="text/javascript" th:src="@{/js/front.js}"></script>
+<script type="text/javascript" th:src="@{/js/archive/billing.js}"></script>
+<script type="text/javascript" th:src="@{/js/archive/account.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var data = /*[[${pictureData}]]*/ '';
+    var mimeType = /*[[${pictureType}]]*/ '';
+    var image = document.getElementById('profilePicture');
+    image.src = 'data:'+mimeType+';base64,'+ data;
+    /*]]>*/
+</script>
+</body>
+</html>

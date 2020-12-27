@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{archive/layout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Archive</title>
+</head>
+<body>
+<div layout:fragment="~{content}">
+    <div class="breadcrumb-holder">
+        <div class="container-fluid">
+            <div th:if="${state == 'VIEW'}">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{'/archive/staff/edit/'+${staff.id}}">Edit Staff</a></li>
+                    <li class="breadcrumb-item active">View Staff       </li>
+                </ul>
+            </div>
+            <div th:if="${state == 'EDIT'}">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{'/archive/staff/view/'+${staff.id}}">View staff</a></li>
+                    <li class="breadcrumb-item active">Edit Staff       </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <fieldset>
+        <div class="col-lg-12 mb-5">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="h6 text-uppercase mb-0">Staff</h3>
+                </div>
+                <div class="card-body">
+                    <div th:with="disabled = ${state == 'VIEW'}">
+                        <form th:action="@{/archive/staff}" th:object="${staff}" class="form-horizontal" method="post">
+                            <input type="hidden" name="state" th:value="${state}">
+                            <input type="hidden" name="id" th:field="*{id}">
+                            <input type="hidden" th:field="${staff.userModel.id}">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                                <p th:each="e : ${#fields.detailedErrors()}" >
+                                    <span th:text="${#strings.capitalize(e.fieldName)}">The field name</span> :
+                                    <span th:text="${e.message}">The error message</span>
+                                </p>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-1">
+                                                <label class="form-control-label">Alias</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" th:disabled="true"  th:field="*{userModel.alias}" placeholder="Alias of Staff" class="form-control form-control-sm">
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label class="form-control-label">First Name</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" th:disabled="true" th:field="*{userModel.firstName}" placeholder="First Name of Staff"  class="form-control form-control-sm">
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label class="form-control-label">Last Name</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" th:disabled="true" th:field="*{userModel.lastName}" placeholder="Last Name of Staff"  class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <label class="form-control-label">Phone Number</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" th:disabled="true" th:field="*{userModel.phoneNumber}" placeholder="Phone number of Staff"  class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label class="form-control-label">Email</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" th:disabled="true" th:field="*{userModel.email}" placeholder="Email  of Staff"  class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <label class="form-control-label">Payment</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" th:disabled="${disabled}" th:field="*{payment}" placeholder="Periodic Payment for Staff"  class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-control-label">Status</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select th:disabled="${disabled}" th:field="*{status}" class="form-control" id="status">
+                                            <div th:each="loadStatus : *{loadedStatus}">
+                                                <div th:if="${staff.id == null and loadStatus != 'ACTIVE'}">
+                                                    <option th:value="${loadStatus}"><span th:text="${loadStatus}"></span></option>
+                                                </div>
+                                                <div th:if="${staff.id != null}">
+                                                    <option th:value="${loadStatus}"><span th:text="${loadStatus}"></span></option>
+                                                </div>
+                                            </div>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row" th:if="${!disabled}">
+                                <div class="text-left" >
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <span th:text="${state == 'NEW'? 'Save' : state == 'EDIT' ? 'Update' : 'Click' }">Click</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+</body>
+</html>

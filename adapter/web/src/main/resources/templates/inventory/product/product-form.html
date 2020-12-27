@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{inventory/layout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Inventory</title>
+</head>
+<body>
+<div layout:fragment="~{content}">
+    <div class="breadcrumb-holder">
+        <div class="container-fluid">
+            <div th:if="${state == 'VIEW'}">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{'/inventory/product/edit/'+${product.id}}">Edit Product</a></li>
+                    <li class="breadcrumb-item active">View Product       </li>
+                </ul>
+            </div>
+            <div th:if="${state == 'EDIT'}">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{'/inventory/product/view/'+${product.id}}">View Product</a></li>
+                    <li class="breadcrumb-item active">Edit Product       </li>
+                </ul>
+            </div>
+                <div th:if ="${state == 'NEW'}">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                        <li class="breadcrumb-item active">New Product       </li>
+                    </ul>
+                </div>
+        </div>
+    </div>
+    <fieldset>
+        <div class="col-lg-12 mb-5">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="h6 text-uppercase mb-0">Product</h3>
+                </div>
+                <div class="card-body">
+                    <div th:with="disabled = ${state == 'VIEW'}">
+                        <form th:action="@{/inventory/product}" th:object="${product}" class="form-horizontal" method="post">
+                            <input type="hidden" name="state" th:value="${state}">
+                            <input type="hidden" name="id" th:field="*{id}">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                                <p th:each="e : ${#fields.detailedErrors()}" >
+                                    <span th:text="${#strings.capitalize(e.fieldName)}">The field name</span> :
+                                    <span th:text="${e.message}">The error message</span>
+                                </p>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-1">
+                                                <label class="form-control-label">Name</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" th:disabled="${disabled}"  th:field="*{name}" placeholder="Name Of Product" class="form-control form-control-sm">
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label class="form-control-label">Amount</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="number" th:disabled="${disabled}" th:field="*{amount}" placeholder="Amount" step=".01" class="form-control form-control-sm">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-control-label">Warranty Period</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="number" th:disabled="${disabled}" th:field="*{warrantyPeriodInMonths}" placeholder="Warranty Period" min="0" step="1" class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="line"></div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label class="form-control-label">Description</label>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <textarea class="form-control z-depth-1" th:disabled="${disabled}" th:field="*{description}"  rows="3" placeholder="Enter description here..."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="line"></div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-1">
+                                                <label class="form-control-label">Category</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <select th:disabled="${disabled}" th:field="*{category}" class="form-control">
+                                                    <div th:each="type : ${productTypes}">
+                                                        <option th:value="${type}"><span th:text="${type}"></span></option>
+                                                    </div>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-control-label">Supplied Date</label>
+                                            </div>
+                                            <div class='col-md-2 input-group date datetimepicker'>
+                                                <input type='text' th:disabled="${disabled}" th:field="*{suppliedDate}" placeholder="Supplied Date" class="form-control disable_div datetimepicker-cursor form-control-sm" />
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-calendar datetimepicker-glyph" ></span>
+                                                </span>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-control-label">Manufactured Date</label>
+                                            </div>
+                                            <div class='col-md-2 input-group date datetimepicker'>
+                                                <input type='text' th:disabled="${disabled}" th:field="*{manufacturedDate}" placeholder="Manufactured Date" class="form-control datetimepicker-cursor form-control-sm" />
+                                                <span class="input-group-addon" >
+                                                    <span class="fa fa-calendar datetimepicker-glyph"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label class="form-control-label">Quantity</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="number" th:disabled="${disabled}" th:field="*{quantity}" placeholder="Quantity" step="0" min="0" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-control-label">Purchased Date</label>
+                                    </div>
+                                    <div class='col-md-2 input-group date datetimepicker'>
+                                        <input type='text' th:disabled="${disabled}" th:field="*{purchasedDate}" placeholder="Purchased Date" class="form-control datetimepicker-cursor form-control-sm" />
+                                        <span class="input-group-addon" >
+                                            <span class="fa fa-calendar datetimepicker-glyph"></span>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-control-label">Expiry Date</label>
+                                    </div>
+                                    <div class='col-md-2 input-group date datetimepicker'>
+                                        <input type='text' th:disabled="${disabled}" th:field="*{expiryDate}" placeholder="Expiry Date" class="form-control datetimepicker-cursor form-control-sm" />
+                                        <span class="input-group-addon" >
+                                            <span class="fa fa-calendar datetimepicker-glyph"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label class="form-control-label">Status</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select th:disabled="${disabled}" th:field="*{status}" class="form-control" id="status">
+                                            <div th:each="loadStatus : *{loadedStatus}">
+                                                <div th:if="${product.id == null and loadStatus != 'ACTIVE'}">
+                                                    <option th:value="${loadStatus}"><span th:text="${loadStatus}"></span></option>
+                                                </div>
+                                                <div th:if="${product.id != null}">
+                                                    <option th:value="${loadStatus}"><span th:text="${loadStatus}"></span></option>
+                                                </div>
+                                            </div>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2 inactive-sub">
+                                        <label class="form-control-label">Sub Status</label>
+                                    </div>
+                                    <div  class="col-md-4 inactive-sub">
+                                        <select th:disabled="${disabled}" th:field="*{inactiveSubStatus}" class="form-control">
+                                            <div th:each="loadStore : *{loadedStore}">
+                                                <option th:value="${loadStore}"><span th:text="${loadStore}"></span></option>
+                                            </div>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row" th:if="${!disabled}">
+                                <div class="text-left" >
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <span th:text="${state == 'NEW'? 'Save' : state == 'EDIT' ? 'Update' : 'Click' }">Click</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+</body>
+</html>
