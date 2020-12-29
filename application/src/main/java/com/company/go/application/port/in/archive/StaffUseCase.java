@@ -31,6 +31,8 @@ public interface StaffUseCase {
 
     List<RegisterUserUseCase.RegisterUserModel> getAvailableRegisteredUsers();
 
+    RegisterUserUseCase.RegisterUserModel findStaffUser(StaffViewModel staff);
+
     boolean deleteStaff(Long id);
 
     Long getStaffMaxId();

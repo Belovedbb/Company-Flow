@@ -55,6 +55,7 @@ public interface PurchaseOrderUseCase {
 
     @Getter
     @Setter
+    @NotExceedProductSize
     class PurchaseOrderViewModel{
         private Long id;
 

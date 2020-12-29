@@ -8,20 +8,19 @@ import com.company.go.application.port.in.inventory.PurchaseOrderUseCase;
 import com.company.go.application.port.out.archive.UpdateStaffPort;
 import com.company.go.application.port.out.global.UpdateUserPort;
 import com.company.go.domain.archive.staff.Staff;
+import com.company.go.domain.global.Constants;
 import com.company.go.domain.global.User;
 import com.company.go.domain.inventory.order.Order;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,12 +28,14 @@ public class StaffService implements StaffUseCase {
 
     UpdateStaffPort staffStore;
     RegisterUserUseCase registerUserUseCase;
+    UpdateUserPort userPort;
 
 
     @Autowired
-    StaffService(UpdateStaffPort staffStore, RegisterUserUseCase userUseCase){
+    StaffService(UpdateStaffPort staffStore, UpdateUserPort userPort, RegisterUserUseCase userUseCase){
         this.staffStore = staffStore;
         this.registerUserUseCase = userUseCase;
+        this.userPort = userPort;
     }
 
     @SneakyThrows({SQLException.class, IOException.class})
@@ -116,8 +117,17 @@ public class StaffService implements StaffUseCase {
 
     @Override
     public List<RegisterUserUseCase.RegisterUserModel> getAvailableRegisteredUsers() {
-        return registerUserUseCase.getAllUsers()
-                /*.stream().filter(e -> e.getStatus().equals("ACTIVE")).collect(Collectors.toList())*/;
+        List<Staff> activeStaffs = staffStore.getTotalStaff().stream().filter(staff -> staff.getStatus().equals(Staff.Constants.Status.ACTIVE)).collect(Collectors.toList());
+        List<User> activeUsers = userPort.getAllUsers().stream().filter(user -> user.getStatus().equals(Constants.Status.ACTIVE)).collect(Collectors.toList());
+        if(!CollectionUtils.isEmpty(activeStaffs)) {
+            activeUsers = activeUsers.stream().filter(user -> activeStaffs.stream().noneMatch(staff -> Objects.equals(user.getId(), staff.getUser().getId()))).collect(Collectors.toList());
+        }
+        return activeUsers.stream().map(Mapper::convert).collect(Collectors.toList());
+    }
+
+    @Override
+    public RegisterUserUseCase.RegisterUserModel findStaffUser(StaffViewModel staff) {
+        return  registerUserUseCase.getUser(staff.getUserModel().getId());
     }
 
     @Override

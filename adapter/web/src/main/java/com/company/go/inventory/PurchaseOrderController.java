@@ -3,10 +3,13 @@ package com.company.go.inventory;
 import com.company.go.ControllerUtilities;
 import com.company.go.Utilities;
 import com.company.go.application.port.in.global.IndexUseCase;
+import com.company.go.application.port.in.inventory.ProductUseCase;
 import com.company.go.application.port.in.inventory.PurchaseOrderUseCase;
+import com.company.go.domain.inventory.product.Product;
 import com.company.go.exceptions.PurchaseOrderNotStoredException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +23,12 @@ public class PurchaseOrderController {
 
     private PurchaseOrderUseCase purchaseOrderUseCase;
     private IndexUseCase indexer;
+    private ProductUseCase productUseCase;
 
-    public PurchaseOrderController(PurchaseOrderUseCase purchaseOrderUseCase, IndexUseCase indexer){
+    public PurchaseOrderController(PurchaseOrderUseCase purchaseOrderUseCase, ProductUseCase productUseCase, IndexUseCase indexer){
         this.indexer = indexer;
         this.purchaseOrderUseCase = purchaseOrderUseCase;
+        this.productUseCase = productUseCase;
     }
 
     @GetMapping
@@ -73,7 +78,6 @@ public class PurchaseOrderController {
     @PostMapping
     public String saveNewPurchaseOrder(Model model, @ModelAttribute("purchaseOrder")  @Valid PurchaseOrderUseCase.PurchaseOrderViewModel purchaseOrder,
                                  BindingResult result) throws IOException, SQLException, PurchaseOrderNotStoredException {
-        //TODO impl empty element check for entry
         if(result.hasErrors()){
             ControllerUtilities.storeIndexDetailsInModel(model, indexer);
             model.addAttribute("state", purchaseOrder.getId() == null ? Utilities.State.NEW.name() : Utilities.State.EDIT.name());
@@ -89,6 +93,7 @@ public class PurchaseOrderController {
                 storedPurchaseOrderId = storedPurchaseOrderId != null ? storedPurchaseOrderId : -3 >> 1;
                 if(previousStoredId != null && (storedPurchaseOrderId <= previousStoredId ) )
                     throw new PurchaseOrderNotStoredException("This order was not saved successfully");
+                updateProduct(purchaseOrder);
                 return "redirect:/inventory/purchase/order/view/"+storedPurchaseOrderId;
             }
         }else{
@@ -96,11 +101,26 @@ public class PurchaseOrderController {
             if(!updated){
                 throw new PurchaseOrderNotStoredException("This order was not updated successfully");
             }
+            updateProduct(purchaseOrder);
             return "redirect:/inventory/purchase/order/view/"+ purchaseOrder.getId();
         }
         return "redirect:/inventory/purchase/order";
     }
 
+    private void updateProduct(PurchaseOrderUseCase.PurchaseOrderViewModel purchaseOrder){
+        if(!CollectionUtils.isEmpty(purchaseOrder.getPurchaseOrderEntries())){
+            for(PurchaseOrderUseCase.PurchaseOrderEntryViewModel entry: purchaseOrder.getPurchaseOrderEntries()){
+                ProductUseCase.ProductViewModel product = productUseCase.viewProduct(entry.getProduct().getId());
+                Long previousQuantity = product.getQuantity();
+                Long currentQuantity = previousQuantity - entry.getOrderQuantity();
+                product.setQuantity(currentQuantity);
+                if(product.getQuantity() == 0L){
+                    product.setStatus(Product.Constants.Status.INACTIVE.name());
+                }
+                productUseCase.editProduct(product.getId(), product);
+            }
+        }
+    }
     @GetMapping("/view/{id}")
     public String viewPurchaseOrder(@PathVariable Long id, Model model) throws IOException, SQLException {
         PurchaseOrderUseCase.PurchaseOrderViewModel purchaseOrder = purchaseOrderUseCase.viewPurchaseOrder(id);

@@ -26,13 +26,11 @@ public class StaffController {
     private IndexUseCase indexer;
 
     private StaffUseCase staffUseCase;
-    private RegisterUserUseCase registerUserUseCase;
 
     @Autowired
-    public StaffController(IndexUseCase indexer, StaffUseCase staffUseCase, RegisterUserUseCase registerUserUseCase) {
+    public StaffController(IndexUseCase indexer, StaffUseCase staffUseCase) {
         this.indexer = indexer;
         this.staffUseCase = staffUseCase;
-        this.registerUserUseCase = registerUserUseCase;
     }
 
     @GetMapping
@@ -41,7 +39,7 @@ public class StaffController {
         ControllerUtilities.storeIndexDetailsInModel(model, indexer);
         model.addAttribute("state", Utilities.State.NEW.name());
         model.addAttribute("staff", staff);
-        model.addAttribute("users", registerUserUseCase.getAllUsers());
+        model.addAttribute("users", staffUseCase.getAvailableRegisteredUsers());
         return "archive/staff/staff-form";
     }
 
@@ -67,7 +65,7 @@ public class StaffController {
 
     @GetMapping("/create/{indexes}")
     public String createStaffs(@PathVariable("indexes") String indexes){
-        List<RegisterUserUseCase.RegisterUserModel> models = registerUserUseCase.getAllUsers();
+        List<RegisterUserUseCase.RegisterUserModel> models = staffUseCase.getAvailableRegisteredUsers();
         if(!CollectionUtils.isEmpty(models)) {
             Arrays.stream(indexes.trim().replaceAll("\\s+", "").split(",")).forEach(index ->
             {
@@ -102,7 +100,7 @@ public class StaffController {
                 return "redirect:/archive/staff/view/"+storedStaffId;
             }
         }else{
-            RegisterUserUseCase.RegisterUserModel user = registerUserUseCase.getUser(staff.getUserModel().getId());
+            RegisterUserUseCase.RegisterUserModel user = staffUseCase.findStaffUser(staff);
             staff.setUserModel(user);
             boolean updated = staffUseCase.editStaff(staff.getId(), staff);
             if(!updated){
