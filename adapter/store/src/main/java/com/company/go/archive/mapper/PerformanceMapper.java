@@ -4,14 +4,14 @@ import com.company.go.StoreUtilities;
 import com.company.go.Utilities;
 import com.company.go.archive.performance.Constants;
 import com.company.go.archive.performance.PerformanceEntity;
+import com.company.go.archive.staff.StaffEntity;
 import com.company.go.domain.archive.performance.Performance;
-import com.company.go.domain.inventory.Money;
-import com.company.go.global.mapper.UserMapper;
+import com.company.go.domain.archive.staff.Staff;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PerformanceMapper {
     private static final Map<Constants.PerformanceStatus, Performance.Constants.Status> statusMapping;
@@ -47,5 +47,35 @@ public class PerformanceMapper {
         entity.setDateCreated(dateCreated);
         entity.setCompanyRegisterer(StoreUtilities.getUser());
         return entity;
+    }
+
+    private static Map<String, Object> mapErasureFilterProperties(Map<String, Object> domainProperties){
+        Map<String, Object> entityProperties = new HashMap<>();
+        domainProperties.forEach((key, value) -> {
+            if(value instanceof Performance.Constants.Status){
+                entityProperties.put(key, Utilities.getKeyByValue(statusMapping, (Performance.Constants.Status)value));
+            }else if(value instanceof LocalDate){
+                Date date = Date.from(((LocalDate)value).atStartOfDay(ZoneId.systemDefault()).toInstant());
+                entityProperties.put(key, date);
+            } else{
+                entityProperties.put(key, value);
+            }
+        });
+        return entityProperties;
+    }
+
+    //mapper for entity class
+    public static List<Utilities.Filter> mapErasureFilter(List<Utilities.Filter> filters){
+        return filters.stream().map(e -> {
+            Utilities.Filter newFilter = new Utilities.Filter();
+            newFilter.setProperties(mapErasureFilterProperties(e.getProperties()));
+            if(e.getKlass().equals(Staff.class)){
+                newFilter.setKlass(StaffEntity.class);
+            }
+            if(e.getKlass().equals(Performance.class)){
+                newFilter.setKlass(PerformanceEntity.class);
+            }
+            return newFilter;
+        }).collect(Collectors.toList());
     }
 }

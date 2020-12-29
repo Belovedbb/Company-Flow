@@ -46,6 +46,7 @@
 <script type="text/javascript" th:src="@{/js/front.js}"></script>
 <script type="text/javascript" th:src="@{/js/archive/archive.js}"></script>
 <script type="text/javascript" th:src="@{/js/archive/staff.js}"></script>
+<script type="text/javascript" th:src="@{/js/archive/performance.js}"></script>
 <script th:inline="javascript">
     /*<![CDATA[*/
     let data = /*[[${pictureData}]]*/ '';
@@ -56,11 +57,13 @@
     let imageTags = document.getElementsByClassName("userPicture");
     let staffUsers = /*[[${users}]]*/;
     let tagCount = 0;
-    for(let user of staffUsers){
-        let dataUser = user.pictureData;
-        let mimeUser = user.pictureType;
-        imageTags[tagCount].src = 'data:'+mimeUser+';base64,'+dataUser;
-        tagCount++;
+    if(staffUsers !== null){
+        for(let user of staffUsers){
+            let dataUser = user.pictureData;
+            let mimeUser = user.pictureType;
+            imageTags[tagCount].src = 'data:'+mimeUser+';base64,'+dataUser;
+            tagCount++;
+        }
     }
     /*]]>*/
 </script>

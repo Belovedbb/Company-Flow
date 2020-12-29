@@ -1,10 +1,13 @@
 package com.company.go.archive.staff;
 
+import com.company.go.Utilities;
 import com.company.go.application.port.out.archive.UpdateStaffPort;
 import com.company.go.archive.mapper.StaffMapper;
 import com.company.go.archive.staff.repo.StaffRepository;
 import com.company.go.domain.archive.staff.Staff;
+import com.company.go.domain.inventory.order.Order;
 import com.company.go.global.repo.UserRepository;
+import com.company.go.inventory.mapper.OrderMapper;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -86,5 +89,11 @@ public class StaffStoreAdapter implements UpdateStaffPort {
         return staffRepo.filterStaff(parameters).stream()
                 .map(StaffMapper::mapStaffEntityToStaffDomain).collect(Collectors.toList());
     }
+
+    @Override
+    public List<Staff> getTotalFilteredStaff(List<Utilities.Filter> filterList, Utilities.FilterCondition condition) {
+        return staffRepo.filterStaff(StaffMapper.mapErasureFilter(filterList), condition).stream().map(StaffMapper::mapStaffEntityToStaffDomain).collect(Collectors.toList());
+    }
+
 
 }

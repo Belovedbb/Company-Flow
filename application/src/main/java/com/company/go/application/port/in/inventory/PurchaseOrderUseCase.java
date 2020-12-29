@@ -9,10 +9,14 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -39,7 +43,7 @@ public interface PurchaseOrderUseCase {
 
     List<PurchaseOrderViewModel> getFilteredPurchaseOrders(PurchaseOrderViewModel criteriaModel);
 
-    List<PurchaseOrderViewModel> getFilteredPurchaseOrders(PurchaseOrderViewModel criteriaModel, RegisterUserUseCase.RegisterUserModel userCriteriaModel, Utilities.FilterCondition condition);
+    List<PurchaseOrderViewModel> getFilteredPurchaseOrders(PurchaseOrderViewModel criteriaModel, RegisterUserUseCase.RegisterUserModel userCriteriaModel, Utilities.FilterCondition condition) throws IOException, SQLException;
 
     List<PurchaseOrderViewModel> getFilteredPurchaseOrders(PurchaseOrderViewModel criteriaModel, Map<String, Object> userCriteriaModel);
 
@@ -93,12 +97,14 @@ public interface PurchaseOrderUseCase {
         
         private ArrayList<OrderEntry> convertToDomainOrderEntries(){
             ArrayList<OrderEntry> orderEntries = new ArrayList<>();
-            for (PurchaseOrderEntryViewModel purchaseOrderEntry : purchaseOrderEntries) {
-                OrderEntry orderEntry = new OrderEntry();
-                orderEntry.setId(purchaseOrderEntry.getId());
-                orderEntry.setProductId(purchaseOrderEntry.getProduct().getId());
-                orderEntry.setQuantity(purchaseOrderEntry.getOrderQuantity());
-                orderEntries.add(orderEntry);
+            if(!CollectionUtils.isEmpty(purchaseOrderEntries)) {
+                for (PurchaseOrderEntryViewModel purchaseOrderEntry : purchaseOrderEntries) {
+                    OrderEntry orderEntry = new OrderEntry();
+                    orderEntry.setId(purchaseOrderEntry.getId());
+                    orderEntry.setProductId(purchaseOrderEntry.getProduct().getId());
+                    orderEntry.setQuantity(purchaseOrderEntry.getOrderQuantity());
+                    orderEntries.add(orderEntry);
+                }
             }
             return orderEntries;
         }
@@ -109,9 +115,9 @@ public interface PurchaseOrderUseCase {
                     convertToDomainOrderEntries(),
                     description,
                     hasVat,
-                    convertToDate(purchasedDate),
+                    StringUtils.isEmpty(purchasedDate) ? null : convertToDate(purchasedDate),
                     Order.Constants.Status.valueOf(status),
-                    convertToDate(lastChangedDate)
+                    StringUtils.isEmpty(lastChangedDate) ? null : convertToDate(lastChangedDate)
             );
         }
     }

@@ -1,20 +1,20 @@
 package com.company.go.archive.staff.repo;
 
+import com.company.go.Utilities;
 import com.company.go.archive.staff.StaffEntity;
 import com.company.go.global.UserEntity;
-import com.company.go.global.repo.UserRepository;
 import org.hibernate.HibernateException;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -75,6 +75,67 @@ public class StaffRepository {
         return query.getResultList();
     }
 
+
+    public List<StaffEntity> filterStaff(List<Utilities.Filter> filters, Utilities.FilterCondition condition){
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<StaffEntity> queryCriteria = criteriaBuilder.createQuery(StaffEntity.class);
+        Root<StaffEntity> staff = queryCriteria.from(StaffEntity.class);
+        List<Predicate> predicateResponse = new ArrayList<>();
+        List<List<Predicate> > mainPredicates = new ArrayList<>();
+        for(Utilities.Filter filter: filters){
+            if(filter.getKlass().equals(StaffEntity.class) ){
+                Map<String, Object> param = filter.getProperties();
+                List<Predicate> predicates = buildFilterStaffEntity(param, criteriaBuilder, staff);
+                mainPredicates.add(predicates);
+            }
+            if(filter.getKlass().equals(UserEntity.class)){
+                Map<String, Object> param = filter.getProperties();
+                List<Predicate> predicates = buildFilterUserEntity(param, criteriaBuilder, staff);
+                mainPredicates.add(predicates);
+            }
+        }
+        if(condition != null){
+            if(condition == Utilities.FilterCondition.AND){
+                List<Predicate> betweenPropertiesAnd = mainPredicates.stream()
+                        .reduce(List.of(), (accumulatedPredicates, predicates) -> Collections.singletonList(criteriaBuilder.and(predicates.toArray(Predicate[]::new))));
+                Predicate pred = betweenPropertiesAnd.stream().reduce(null, (accumulatedPredicate, predicate) -> criteriaBuilder.and(List.of(predicate).toArray(Predicate[]::new)));
+                predicateResponse  = List.of(pred);
+            }else if(condition == Utilities.FilterCondition.OR){
+                List<Predicate> betweenPropertiesAnd = mainPredicates.stream()
+                        .reduce(List.of(), (accumulatedPredicates, predicates) -> Collections.singletonList(criteriaBuilder.or(predicates.toArray(Predicate[]::new))));
+                Predicate pred = betweenPropertiesAnd.stream().reduce(null, (accumulatedPredicate, predicate) -> criteriaBuilder.or(List.of(predicate).toArray(Predicate[]::new)));
+                predicateResponse = List.of(pred);
+            }else{
+                if(!CollectionUtils.isEmpty(mainPredicates)){
+                    predicateResponse = mainPredicates.get(0);
+                }
+            }
+            queryCriteria.where(predicateResponse.toArray(Predicate[]::new));
+        }
+        TypedQuery<StaffEntity> query = entityManager.createQuery(queryCriteria);
+        return query.getResultList();
+    }
+
+    private List<Predicate> buildFilterStaffEntity(Map<String, Object> properties, CriteriaBuilder criteriaBuilder, Root<StaffEntity> staff){
+        List<Predicate> productPredicateClauses = null;
+        if(!CollectionUtils.isEmpty(properties)) {
+            productPredicateClauses = properties.keySet().stream()
+                    .map(key -> criteriaBuilder.equal(staff.get(key), properties.get(key)))
+                    .collect(Collectors.toList());
+        }
+        return productPredicateClauses;
+    }
+
+    private List<Predicate> buildFilterUserEntity(Map<String, Object> properties, CriteriaBuilder criteriaBuilder, Root<StaffEntity> staff){
+        List<Predicate> predicateClauses = null;
+        if(!CollectionUtils.isEmpty(properties)) {
+            Join<StaffEntity, UserEntity> joinUser = staff.join("type", JoinType.INNER);
+            predicateClauses = properties.keySet().stream()
+                    .map(key -> joinUser.on(criteriaBuilder.equal(joinUser.get(key), properties.get(key))).getOn())
+                    .collect(Collectors.toList());
+        }
+        return predicateClauses;
+    }
 
     public Long getMaxId(Class klazz) throws NoResultException {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

@@ -12,17 +12,14 @@ import java.time.LocalDate;
 public class Performance {
     private Long id;
 
-    @NonNull
     private Staff staff;
 
-    @NonNull
     private Double averageMonthlyPerformance;
 
     private Double bonusPoint;
 
     private LocalDate date;
 
-    @NonNull
     private Performance.Constants.Status status;
 
     static public class Constants {

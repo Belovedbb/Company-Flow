@@ -1,6 +1,8 @@
 package com.company.go.application.port.in.archive;
 
+import com.company.go.Utilities;
 import com.company.go.application.port.in.global.RegisterUserUseCase;
+import com.company.go.application.port.in.inventory.PurchaseOrderUseCase;
 import com.company.go.domain.archive.staff.Staff;
 import com.company.go.domain.inventory.Money;
 import com.company.go.domain.inventory.product.Product;
@@ -24,6 +26,8 @@ public interface StaffUseCase {
     List<StaffViewModel> getAllStaffs();
 
     List<StaffViewModel> getFilteredStaffs(StaffViewModel criteriaModel);
+
+    List<StaffViewModel> getFilteredStaffs(StaffViewModel criteriaModel, RegisterUserUseCase.RegisterUserModel userCriteriaModel, Utilities.FilterCondition condition) throws IOException, SQLException;
 
     List<RegisterUserUseCase.RegisterUserModel> getAvailableRegisteredUsers();
 
@@ -60,9 +64,9 @@ public interface StaffUseCase {
         public Staff toStaff() throws IOException, SQLException {
             return new Staff(
                     id,
-                    userModel.toUser(),
+                    userModel  == null ? null : userModel.toUser(),
                     new Money(Money.doubleToBigDecimal((payment == null ? 0d : payment))),
-                    Staff.Constants.Status.valueOf(status)
+                    status == null ? null : Staff.Constants.Status.valueOf(status)
             );
         }
     }

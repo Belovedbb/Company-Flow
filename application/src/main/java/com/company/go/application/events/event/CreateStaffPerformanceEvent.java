@@ -9,6 +9,8 @@ import com.company.go.domain.archive.staff.Staff;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.util.CollectionUtils;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -29,7 +31,7 @@ public class CreateStaffPerformanceEvent extends ApplicationEvent {
         return Utilities.isWithinRange(factor, start, end);
     }
 
-    public void createMonthlyPerformance(StaffUseCase useCase, PerformanceUseCase performanceUseCase, PurchaseOrderUseCase purchaseOrderUseCase) {
+    public void createMonthlyPerformance(StaffUseCase useCase, PerformanceUseCase performanceUseCase, PurchaseOrderUseCase purchaseOrderUseCase) throws IOException, SQLException {
         Map<StaffUseCase.StaffViewModel, Long> staffPerformance = new HashMap<>();
         List<StaffUseCase.StaffViewModel> activeStaffs = useCase.getAllStaffs().parallelStream().
                 filter(e -> e.getStatus().equalsIgnoreCase(Staff.Constants.Status.ACTIVE.name())).collect(Collectors.toList());

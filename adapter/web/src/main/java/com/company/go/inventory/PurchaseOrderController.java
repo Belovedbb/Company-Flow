@@ -47,8 +47,9 @@ public class PurchaseOrderController {
     }
 
     @PostMapping("/listing/filter")
-    public String getFilteredPurchaseOrderListing(Model model, PurchaseOrderUseCase.PurchaseOrderViewModel purchaseOrder){
-        return "";
+    public String getFilteredPurchaseOrderListing(Model model, PurchaseOrderUseCase.PurchaseOrderViewModel purchaseOrder) throws IOException, SQLException {
+        model.addAttribute("purchaseOrders", purchaseOrderUseCase.getFilteredPurchaseOrders(purchaseOrder, null, Utilities.FilterCondition.AND));
+        return "inventory/purchaseorder/purchaseorder-listing :: result";
     }
 
     @PostMapping("/addRemoveOrderEntry")

@@ -1,5 +1,6 @@
 package com.company.go.application.port.out.archive;
 
+import com.company.go.Utilities;
 import com.company.go.domain.archive.performance.Performance;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface UpdatePerformancePort {
     List<Performance> getTotalPerformance();
 
     List<Performance> getTotalFilteredPerformance(Map<String, Object> parameters);
+
+    List<Performance> getTotalFilteredPerformance(List<Utilities.Filter> filterList, Utilities.FilterCondition condition);
 }

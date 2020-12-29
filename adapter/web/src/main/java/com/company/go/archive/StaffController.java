@@ -55,8 +55,13 @@ public class StaffController {
     }
 
     @PostMapping("/listing/filter")
-    public String getFilteredStaffListing(Model model, StaffUseCase.StaffViewModel staff){
-        model.addAttribute("staffs", staffUseCase.getFilteredStaffs(staff));
+    public String getFilteredStaffListing(Model model, StaffUseCase.StaffViewModel staff) throws IOException, SQLException {
+        RegisterUserUseCase.RegisterUserModel userModel = null;
+        if(staff.getUserModel() != null && staff.getUserModel().getId() != null){
+            userModel = new RegisterUserUseCase.RegisterUserModel();
+            userModel.setId(staff.getUserModel().getId());
+        }
+        model.addAttribute("staffs", staffUseCase.getFilteredStaffs(staff,userModel, Utilities.FilterCondition.AND));
         return "archive/staff/staff-listing :: result";
     }
 

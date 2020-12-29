@@ -13,13 +13,11 @@ import javax.validation.constraints.NotNull;
 public class Staff {
     private Long id;
 
-    @NonNull
     private User user;
 
-    @NotNull
     private Money payment;
 
-    @NonNull
+
     private Constants.Status status;
 
     static public class Constants {

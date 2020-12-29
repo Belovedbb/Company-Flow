@@ -3,7 +3,9 @@ package com.company.go.archive;
 import com.company.go.ControllerUtilities;
 import com.company.go.Utilities;
 import com.company.go.application.port.in.archive.PerformanceUseCase;
+import com.company.go.application.port.in.archive.StaffUseCase;
 import com.company.go.application.port.in.global.IndexUseCase;
+import com.company.go.application.port.in.global.RegisterUserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,8 +42,13 @@ public class PerformanceController {
     }
 
     @PostMapping("/listing/filter")
-    public String getFilteredPerformanceListing(Model model, PerformanceUseCase.PerformanceViewModel performance){
-        model.addAttribute("performances", performanceUseCase.getFilteredPerformances(performance));
+    public String getFilteredPerformanceListing(Model model, PerformanceUseCase.PerformanceViewModel performance) throws IOException, SQLException {
+        StaffUseCase.StaffViewModel staffModel = null;
+        if(performance.getStaff() != null && performance.getStaff().getId() != null){
+            staffModel = new StaffUseCase.StaffViewModel();
+            staffModel.setId(performance.getStaff().getId());
+        }
+        model.addAttribute("performances", performanceUseCase.getFilteredPerformances(performance, staffModel, Utilities.FilterCondition.AND));
         return "archive/performance/performance-listing :: result";
     }
 

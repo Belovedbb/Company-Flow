@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -155,24 +157,31 @@ public class PurchaseOrderService implements PurchaseOrderUseCase {
     }
 
     Map<String, Object> getOrderProperties(PurchaseOrderViewModel criteriaModel){
+        Order order = criteriaModel.toPurchaseOrder();
         Map<String, Object> filterMap = new HashMap<>();
             if(!StringUtils.isEmpty(criteriaModel.getDescription())){
-                filterMap.put("description", criteriaModel.getDescription());
+                filterMap.put("description", order.getDescription());
             }
-
+            if(!StringUtils.isEmpty(criteriaModel.getPurchasedDate())){
+                filterMap.put("purchasedDate", order.getPurchasedDate());
+            }
+            if(!StringUtils.isEmpty(criteriaModel.getStatus())){
+                filterMap.put("status", order.getStatus());
+            }
         return filterMap;
     }
 
-    Map<String, Object> getUserProperties(RegisterUserUseCase.RegisterUserModel userCriteriaModel){
+    Map<String, Object> getUserProperties(RegisterUserUseCase.RegisterUserModel userCriteriaModel) throws IOException, SQLException {
+        User user = userCriteriaModel.toUser();
         Map<String, Object> filterMap = new HashMap<>();
             if(userCriteriaModel.getId() != null){
-                filterMap.put("Id", userCriteriaModel.getId());
+                filterMap.put("Id", user.getId());
             }
         return filterMap;
     }
 
     @Override
-    public List<PurchaseOrderViewModel> getFilteredPurchaseOrders(PurchaseOrderViewModel criteriaModel, RegisterUserUseCase.RegisterUserModel userCriteriaModel, Utilities.FilterCondition condition) {
+    public List<PurchaseOrderViewModel> getFilteredPurchaseOrders(PurchaseOrderViewModel criteriaModel, RegisterUserUseCase.RegisterUserModel userCriteriaModel, Utilities.FilterCondition condition) throws IOException, SQLException {
         List<Utilities.Filter> filters = new ArrayList<>();
 
         if(criteriaModel != null) {

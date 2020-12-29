@@ -78,10 +78,25 @@ public class OrderMapper {
         return entity;
     }
 
+    //mapper for filter properties
+    //map only user defined values, primitives are left out for optimization
+    private static Map<String, Object> mapErasureFilterProperties(Map<String, Object> domainProperties){
+        Map<String, Object> entityProperties = new HashMap<>();
+        domainProperties.forEach((key, value) -> {
+            if(value instanceof Order.Constants.Status){
+                entityProperties.put(key, Utilities.getKeyByValue(statusMapping, (Order.Constants.Status)value));
+            }else{
+                entityProperties.put(key, value);
+            }
+        });
+        return entityProperties;
+    }
+
+    //mapper for entity class
     public static List<Utilities.Filter> mapErasureFilter(List<Utilities.Filter> filters){
         return filters.stream().map(e -> {
             Utilities.Filter newFilter = new Utilities.Filter();
-            newFilter.setProperties(e.getProperties());
+            newFilter.setProperties(mapErasureFilterProperties(e.getProperties()));
             if(e.getKlass().equals(User.class)){
                 newFilter.setKlass(UserEntity.class);
             }

@@ -5,3 +5,8 @@ common/common.iml
 application/application.iml
 web/web.iml
 store/store.iml
+adapter/store/target/
+adapter/web/target/
+application/target/
+common/target/
+starter/target/

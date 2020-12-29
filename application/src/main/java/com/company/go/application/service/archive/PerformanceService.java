@@ -1,5 +1,6 @@
 package com.company.go.application.service.archive;
 
+import com.company.go.Utilities;
 import com.company.go.application.port.Mapper;
 import com.company.go.application.port.in.archive.PerformanceUseCase;
 import com.company.go.application.port.in.archive.StaffUseCase;
@@ -15,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +66,49 @@ public class PerformanceService implements PerformanceUseCase{
         return performanceStore.getTotalFilteredPerformance(filterMap)
                 .stream().map(Mapper::convert)
                 .collect(Collectors.toList());
+    }
+
+    private Map<String, Object> getStaffProperties(StaffUseCase.StaffViewModel criteriaModel) throws IOException, SQLException {
+        Staff staff = criteriaModel.toStaff();
+        Map<String, Object> filterMap = new HashMap<>();
+        if(criteriaModel.getId() != null){
+            filterMap.put("Id", staff.getId());
+        }
+        return filterMap;
+    }
+
+    private Map<String, Object> getPerformanceProperties(PerformanceViewModel criteriaModel) throws IOException, SQLException {
+        Performance performance = criteriaModel.toPerformance();
+        Map<String, Object> filterMap = new HashMap<>();
+        if(criteriaModel.getId() != null){
+            filterMap.put("id", performance.getId());
+        }
+        if(!StringUtils.isEmpty(criteriaModel.getStatus())){
+            filterMap.put("status", performance.getStatus());
+        }
+        if(criteriaModel.getDate() != null){
+            filterMap.put("dateCreated", performance.getDate());
+        }
+        return filterMap;
+    }
+
+    @Override
+    public List<PerformanceViewModel> getFilteredPerformances(PerformanceViewModel criteriaModel, StaffUseCase.StaffViewModel staffCriteriaModel, Utilities.FilterCondition condition) throws IOException, SQLException {
+        List<Utilities.Filter> filters = new ArrayList<>();
+
+        if(criteriaModel != null) {
+            Utilities.Filter<Performance> performanceFilter = new Utilities.Filter<>();
+            performanceFilter.setKlass(Performance.class);
+            performanceFilter.setProperties(getPerformanceProperties(criteriaModel));
+            filters.add(performanceFilter);
+        }
+        if(staffCriteriaModel != null) {
+            Utilities.Filter<Staff> staffFilter = new Utilities.Filter<>();
+            staffFilter.setKlass(Staff.class);
+            staffFilter.setProperties(getStaffProperties(staffCriteriaModel));
+            filters.add(staffFilter);
+        }
+        return performanceStore.getTotalFilteredPerformance(filters, condition).stream().map(Mapper::convert).collect(Collectors.toList());
     }
 
     @Override

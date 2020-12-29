@@ -9,6 +9,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 @Component
@@ -28,7 +30,7 @@ public class ArchiveListener {
 
     //@Async
     @EventListener
-    void handleCreateStaffPerformanceEvent(CreateStaffPerformanceEvent event){
+    void handleCreateStaffPerformanceEvent(CreateStaffPerformanceEvent event) throws IOException, SQLException {
         LocalDate today = LocalDate.now();
         if(today.getDayOfMonth() == 28) {
             event.createMonthlyPerformance(staffUseCase, performanceUseCase, purchaseOrderUseCase);

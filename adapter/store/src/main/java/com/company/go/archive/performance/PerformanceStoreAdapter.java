@@ -1,9 +1,8 @@
 package com.company.go.archive.performance;
 
-import com.company.go.application.port.out.archive.UpdatePerformancePort;
+import com.company.go.Utilities;
 import com.company.go.application.port.out.archive.UpdatePerformancePort;
 import com.company.go.archive.mapper.PerformanceMapper;
-import com.company.go.archive.performance.PerformanceEntity;
 import com.company.go.archive.performance.repo.PerformanceRepository;
 import com.company.go.domain.archive.performance.Performance;
 import com.company.go.global.repo.UserRepository;
@@ -87,6 +86,11 @@ public class PerformanceStoreAdapter implements UpdatePerformancePort {
     public List<Performance> getTotalFilteredPerformance(Map<String, Object> parameters) {
         return performanceRepo.filterPerformance(parameters).stream()
                 .map(PerformanceMapper::mapPerformanceEntityToPerformanceDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Performance> getTotalFilteredPerformance(List<Utilities.Filter> filterList, Utilities.FilterCondition condition) {
+        return performanceRepo.filterPerformance(PerformanceMapper.mapErasureFilter(filterList), condition).stream().map(PerformanceMapper::mapPerformanceEntityToPerformanceDomain).collect(Collectors.toList());
     }
 
 }

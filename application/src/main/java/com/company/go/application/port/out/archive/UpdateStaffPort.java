@@ -1,6 +1,8 @@
 package com.company.go.application.port.out.archive;
 
+import com.company.go.Utilities;
 import com.company.go.domain.archive.staff.Staff;
+import com.company.go.domain.inventory.order.Order;
 
 import java.util.List;
 import java.util.Map;
@@ -20,5 +22,6 @@ public interface UpdateStaffPort {
 
     List<Staff> getTotalFilteredStaff(Map<String, Object> parameters);
 
+    List<Staff> getTotalFilteredStaff(List<Utilities.Filter> filterList, Utilities.FilterCondition condition);
 
 }
