@@ -7,6 +7,7 @@ import com.company.go.domain.inventory.product.ProductType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -70,7 +71,7 @@ public interface ProductUseCase {
         private String inactiveSubStatus;
 
         private LocalDateTime convertToDate(String date){
-            return LocalDateTime.parse(date, Utilities.getDateTimeFormatter());
+            return StringUtils.isEmpty(date) ? null : LocalDateTime.parse(date, Utilities.getDateTimeFormatter());
         }
 
         public List<String> getLoadedStatus(){

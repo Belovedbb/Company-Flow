@@ -6,10 +6,10 @@ import com.company.go.domain.inventory.Money;
 import com.company.go.domain.inventory.product.Product;
 import com.company.go.domain.inventory.product.ProductType;
 import com.company.go.properties.CompanyProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,7 +19,6 @@ public class ProductService implements ProductUseCase {
     private UpdateProductPort productStoreAdapter;
     private CompanyProperties properties;
 
-    @Autowired
     public ProductService(UpdateProductPort productStoreAdapter, CompanyProperties properties) {
         this.productStoreAdapter = productStoreAdapter;
         this.properties = properties;
