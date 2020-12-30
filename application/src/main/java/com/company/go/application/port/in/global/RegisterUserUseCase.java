@@ -1,8 +1,7 @@
 package com.company.go.application.port.in.global;
 
-import com.company.go.domain.global.User;
 import com.company.go.domain.global.Constants;
-import lombok.Data;
+import com.company.go.domain.global.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.StringUtils;
@@ -13,7 +12,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -29,6 +27,10 @@ public interface RegisterUserUseCase {
     List<RegisterUserModel> getAllUsers();
 
     RegisterUserModel getUser(Long id);
+
+    RegisterUserModel getUser(String key);
+
+    boolean updateUser(Long id, RegisterUserModel model) throws IOException, SQLException;
 
     @Getter
     @Setter

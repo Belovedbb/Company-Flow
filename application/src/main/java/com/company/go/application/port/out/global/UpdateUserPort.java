@@ -14,4 +14,6 @@ public interface UpdateUserPort {
 
     User getUser(Long id);
 
+    boolean updateUser(Long id, User currentUser);
+
 }

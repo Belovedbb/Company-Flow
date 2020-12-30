@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{preference/layout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Settings</title>
+</head>
+<body>
+<div layout:fragment="~{content}">
+    <div class="breadcrumb-holder">
+        <div class="container-fluid">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                <li class="breadcrumb-item active">Settings</li>
+            </ul>
+        </div>
+    </div>
+    <fieldset >
+        <div class="container-fluid">
+            <div class="row" th:with="disabled = ${false}">
+                <div class="col-lg-12">
+                    <form class="card" th:action="@{/preference/settings}" th:object="${user}" method="post">
+                        <div class="card-header">
+                            <h3 class="card-title">Profile Setting</h3>
+                        </div>
+                        <div class="card-body">
+                            <input type="hidden" name="state" th:value="${state}">
+                            <input type="hidden" name="id" th:field="*{id}">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                                <p th:each="e : ${#fields.detailedErrors()}" >
+                                    <span th:text="${#strings.capitalize(e.fieldName)}">The field name</span> :
+                                    <span th:text="${e.message}">Error message</span>
+                                </p>
+                            </div>
+                            <div class="line"></div>
+                            <div class="row mb-3">
+                                <div class="col-auto d-flex align-items-center"><span style="background-image: url(img/avatar-7.jpg)" class="avatar avatar-lg"></span></div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="form-label">Alias</label>
+                                        <input th:field="*{alias}" required data-msg="Please enter a valid input"  placeholder="Your name" class="form-control" th:disabled ="${disabled}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Address</label>
+                                <textarea rows="8" required data-msg="Please enter a valid input" class="form-control" th:field="*{address}" th:disabled ="${disabled}"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Contact Number</label>
+                                <input type="tel" th:disabled ="${disabled}" required data-msg="Please enter a valid phone number" placeholder="Your contact number" th:field="*{phoneNumber}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="card-footer text-right">
+                            <button class="btn btn-primary" th:disabled ="${disabled}">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+</body>
+</html>

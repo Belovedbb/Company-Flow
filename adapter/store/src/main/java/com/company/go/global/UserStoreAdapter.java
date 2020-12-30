@@ -7,6 +7,8 @@ import com.company.go.archive.staff.StaffEntity;
 import com.company.go.domain.global.User;
 import com.company.go.global.mapper.UserMapper;
 import com.company.go.global.repo.UserRepository;
+import com.company.go.inventory.mapper.ProductMapper;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -55,6 +57,17 @@ public class UserStoreAdapter implements UpdateUserPort {
     @Override
     public User getUser(Long id) {
         return UserMapper.mapUserEntityToUserDomain(userRepo.getUser(id));
+    }
+
+    @Override
+    public boolean updateUser(Long id, User currentUser) {
+        try {
+           UserEntity user = UserMapper.mapUserDomainToUserEntity(currentUser);
+            userRepo.updateUser(user);
+        }catch (HibernateException ex){
+            return false;
+        }
+        return true;
     }
 
 

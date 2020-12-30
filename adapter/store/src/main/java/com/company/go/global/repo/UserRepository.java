@@ -20,6 +20,11 @@ public class UserRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    public void updateUser(UserEntity user) throws HibernateException{
+        user.setProfilePicture(findUserByEmail(user.getEmail()).getProfilePicture());
+        entityManager.merge(user);
+    }
+
     public UserEntity findUserByEmail(String email) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<UserEntity> queryCriteria = criteriaBuilder.createQuery(UserEntity.class);

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{preference/layout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Profile</title>
+</head>
+<body>
+<div layout:fragment="~{content}">
+    <div class="breadcrumb-holder">
+        <div class="container-fluid">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                <li class="breadcrumb-item active">Profile</li>
+            </ul>
+        </div>
+    </div>
+    <fieldset >
+        <div class="container-fluid">
+            <div class="row" th:with="disabled = ${true}">
+                <div class="col-lg-4">
+                    <div class="card card-profile">
+                        <div style="background-image: url(img/photos/paul-morris-116514-unsplash.jpg);" class="card-header"></div>
+                        <div class="card-body text-center"><img  class="card-profile-img userPicture">
+                            <h3 class="mb-3" th:text="${user.alias}"></h3>
+                            <p class="mb-4" th:text="${user.email}"></p>
+                        </div>
+                    </div>
+                    <form class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">My Profile</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-auto d-flex align-items-center"><span style="background-image: url(img/avatar-7.jpg)" class="avatar avatar-lg"></span></div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="form-label">Name</label>
+                                        <input th:value="${user.lastName} + ' ' + ${user.firstName}" placeholder="Your name" class="form-control" th:disabled ="${disabled}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Bio</label>
+                                <textarea rows="8" class="form-control" th:disabled ="${disabled}"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input th:disabled ="${disabled}" placeholder="you@domain.com" th:value="${user.email}" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Password</label>
+                                <input th:disabled ="${disabled}" type="password" value="password" class="form-control">
+                            </div>
+                        </div>
+                        <div class="card-footer text-right">
+                            <button class="btn btn-primary" th:disabled ="${disabled}">Save</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-8">
+                    <form class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Profile</h3>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group mb-4">
+                                        <label class="form-label">Company</label>
+                                        <input type="text" th:disabled ="${disabled}" placeholder="Company" value="Company Flow" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="form-group mb-4">
+                                        <label class="form-label">Alias</label>
+                                        <input type="text" th:disabled ="${disabled}" placeholder="Username" th:value="${user.alias}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="form-group mb-4">
+                                        <label class="form-label">Email address</label>
+                                        <input type="email" th:disabled ="${disabled}" th:value="${user.email}" placeholder="Email" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="form-group mb-4">
+                                        <label class="form-label">First Name</label>
+                                        <input type="text" th:disabled ="${disabled}" th:value="${user.firstName}" placeholder="First name" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="form-group mb-4">
+                                        <label class="form-label">Last Name</label>
+                                        <input type="text" th:disabled ="${disabled}" th:value="${user.lastName}" placeholder="Last Name" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="form-group mb-4">
+                                        <label class="form-label">Phone Number</label>
+                                        <input type="text" th:disabled ="${disabled}" th:value="${user.phoneNumber}" placeholder="City" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="form-group mb-4">
+                                        <label class="form-label">Role</label>
+                                        <input type="text" th:disabled ="${disabled}" th:value="${roles}" placeholder="ZIP" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group mb-4">
+                                        <label class="form-label">Address</label>
+                                        <input type="text" th:disabled ="${disabled}" th:value="${user.address}" placeholder="Home Address" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group mb-0">
+                                        <label class="form-label">About Me</label>
+                                        <textarea rows="5" th:disabled ="${disabled}" placeholder="Description" value="I live in planet earth, hello aliens" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-right">
+                            <button type="submit" th:disabled ="${disabled}" class="btn btn-primary">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+</body>
+</html>

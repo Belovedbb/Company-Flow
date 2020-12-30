@@ -7,7 +7,7 @@
             <!-- Sidebar Header    -->
             <div class="sidenav-header d-flex align-items-center justify-content-center">
                 <div class="sidenav-header-inner text-center" >
-                    <a href="#"><img id="profilePicture"  th:alt="${alias}" class="img-fluid rounded-circle"></a>
+                    <a th:href="@{/preference/profile/}"><img id="profilePicture"  th:alt="${alias}" class="img-fluid rounded-circle"></a>
                     <h2 class="h5" th:text="${fullName}">Anonymous</h2><span th:text = "${alias}">Anonymous</span><br><span th:text="${roles}"></span>
                 </div>
                 <!-- Small Brand information, appears on minimized sidebar-->

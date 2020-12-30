@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Base64Utils;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -49,6 +48,18 @@ public class UserService implements RegisterUserUseCase, LoginUserUseCase, UserD
     public RegisterUserModel getUser(Long id) {
         User user = storeAdapter.getUser(id);
         return convert(user);
+    }
+
+    @Override
+    public RegisterUserModel getUser(String key) {
+        User user = storeAdapter.findUserByEmail(key);
+        return convert(user);
+    }
+
+    @Override
+    public boolean updateUser(Long id, RegisterUserModel model) throws IOException, SQLException {
+        User user = model.toUser();
+        return storeAdapter.updateUser(id, user);
     }
 
     @Override
