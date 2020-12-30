@@ -19,20 +19,20 @@
                 <ul id="side-main-menu" class="side-menu list-unstyled">
                     <li><a th:href="@{/}"> <i class="icon-home"></i>Home                             </a></li>
                     <li><a href="#formsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-form"></i>Inventory </a>
-                        <ul id="formsDropdown" class="collapse list-unstyled fa fa-smoking-ban">
+                        <ul id="formsDropdown" class="collapse list-unstyled ">
                             <li><a th:href="@{/inventory/product/}">Product</a></li>
                             <li><a th:href="@{/inventory/purchase/order/}">Purchase Order</a></li>
                             <li><a th:href="@{/report/inventory/}">Report</a></li>
                         </ul>
                     </li>
-                    <li><a href="#chartsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-chart-bar"></i>Staff Archive </a>
+                    <li><a href="#chartsDropdown" aria-expanded="false" data-toggle="collapse"> Staff Archive </a>
                         <ul id="chartsDropdown" class="collapse list-unstyled ">
                             <li><a th:href="@{/archive/staff/}">Staff</a></li>
                             <li><a th:href="@{/archive/performance/listing/}">Production and Performance</a></li>
                             <li><a th:href="@{/report/archive/}">Report</a></li>
                         </ul>
                     </li>
-                    <li><a href="#tablesDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-grid fas fa-table"></i>Billing </a>
+                    <li><a href="#tablesDropdown" aria-expanded="false" data-toggle="collapse"> Billing </a>
                         <ul id="tablesDropdown" class="collapse list-unstyled ">
                             <li><a th:href="@{/billing/account/listing/}">Account</a></li>
                             <li><a th:href="@{/billing/account/report/}">Report</a></li>
@@ -46,7 +46,7 @@
                             <li><a th:href="@{#}">Listener Notifications</a></li>
                         </ul>
                     </li>
-                    <li><a href="#pagesDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Report </a>
+                    <li><a href="#pagesDropdown" aria-expanded="false" data-toggle="collapse"> Report </a>
                         <ul id="pagesDropdown" class="collapse list-unstyled ">
                             <li><a th:href="@{/inventory/product/report/}">Product</a></li>
                             <li><a th:href="@{/archive/staff/report/}">Staff</a></li>
