@@ -9,47 +9,50 @@
     <link th:href="@{/css/login.css}" rel="stylesheet" />
 </head>
 <body>
-<div class="container">
-    <div class=" mb-4">
-        <fieldset>
-            <form class="form-signin" th:action="@{/login}" method="post">
+<div class="container-log" th:style="'background-image: url('+ @{'/img/company-login.jpg' } +');'">
+    <div class="container">
+        <div class=" mb-4">
+            <fieldset>
 
-                <div class="text-center mb-4">
-                    <h1 class="h3 mb-3 font-weight-normal">Login</h1>
-                </div>
-                <div class="form-label-group">
-                    <input type="email" id="username" th:name="username" class="form-control" placeholder="Email address" required autofocus>
-                    <label for="username">Email address</label>
+                <form class="form-signin" th:action="@{/login}" method="post">
+
+                    <div class="text-center mb-4">
+                        <h1 class="h3 mb-3 font-weight-normal">Login</h1>
+                    </div>
+                    <div class="form-label-group">
+                        <input type="email" id="username" th:name="username" class="form-control" placeholder="Email address" required autofocus>
+                        <label for="username">Email address</label>
+                    </div>
+
+                    <div class="form-label-group">
+                        <input type="password" id="password"  th:name="password" class="form-control" placeholder="Password" required>
+                        <label for="password">Password</label>
+                    </div>
+
+                    <div class="checkbox mb-3">
+                        <label>
+                            <input type="checkbox" name="remember-me" value="remember-me"> Remember me
+                        </label>
+                    </div>
+                    <hr class="mb-4">
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+                    <br>
+                    <div th:if="${param.error}" class="alert alert-danger">
+                        Invalid Username or Password
+                    </div>
+                    <div th:if="${param.logout}" class="alert alert-success">
+                        Successfully logged out
+                    </div>
+                </form>
+                <div class="signin-link card mb-3 p-1">
+                    <div class="card-header">Don't have an account?    <a th:href="@{/register}">Sign Up</a>  </div>
                 </div>
 
-                <div class="form-label-group">
-                    <input type="password" id="password"  th:name="password" class="form-control" placeholder="Password" required>
-                    <label for="password">Password</label>
-                </div>
+            </fieldset>
+        </div>
 
-                <div class="checkbox mb-3">
-                    <label>
-                        <input type="checkbox" name="remember-me" value="remember-me"> Remember me
-                    </label>
-                </div>
-                <hr class="mb-4">
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
-                <br>
-                <div th:if="${param.error}" class="alert alert-danger">
-                    Invalid Username or Password
-                </div>
-                <div th:if="${param.logout}" class="alert alert-success">
-                    Successfully logged out
-                </div>
-            </form>
-            <div class="signin-link card mb-3 p-1">
-                <div class="card-header">Don't have an account?    <a th:href="@{/register}">Sign Up</a>  </div>
-            </div>
-
-        </fieldset>
+        <div th:replace="~{global/footer :: footer-frag}"></div>
     </div>
-
-    <div th:replace="~{global/footer :: footer-frag}"></div>
 </div>
 </body>
 </html>
