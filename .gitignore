@@ -3,8 +3,8 @@ Company.iml
 starter/starter.iml
 common/common.iml
 application/application.iml
-web/web.iml
-store/store.iml
+adapter/web/web.iml
+adapter/store/store.iml
 adapter/store/target/
 adapter/web/target/
 application/target/
