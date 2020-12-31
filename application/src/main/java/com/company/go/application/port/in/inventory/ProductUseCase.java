@@ -65,7 +65,6 @@ public interface ProductUseCase {
         @NotEmpty(message = "Expiry Date must not be empty")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         private String expiryDate;
-        @NotEmpty(message = "Status must not be empty")
         private String lastChangedDate;
         private String status;
         private String inactiveSubStatus;
