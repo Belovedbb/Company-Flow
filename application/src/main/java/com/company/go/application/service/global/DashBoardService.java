@@ -135,6 +135,7 @@ public class DashBoardService implements DashBoardUseCase {
         return Utilities.isWithinRangeInclusive(factor, start, end);
     }
 
+    @Override
     public Map<String, Long>[] summaryChartData(List<SummaryWidgetViewModel> summaries){
         Map<String, Long> containerMonth = new HashMap<>();
         Map<String, Long> containerYear = new HashMap<>();
@@ -149,6 +150,7 @@ public class DashBoardService implements DashBoardUseCase {
         return new Map[]{containerMonth, containerYear};
     }
 
+    @Override
     public Map<String, Long>[] detailedProductChartData(){
         List<ProductUseCase.ProductViewModel> products = productUseCase.getAllProducts();
         return new Map[]{detailedProductYearRange(products), detailedProductStatus(products)};
@@ -180,6 +182,7 @@ public class DashBoardService implements DashBoardUseCase {
     }
 
 
+    @Override
     public Map<String, Long>[] detailedOrderChartData(){
         List<PurchaseOrderUseCase.PurchaseOrderViewModel> orders = orderUseCase.getAllPurchaseOrders();
         return new Map[]{detailedOrderYearRange(orders), detailedOrderStatus(orders)};

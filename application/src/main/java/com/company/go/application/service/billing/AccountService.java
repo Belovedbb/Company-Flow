@@ -9,6 +9,7 @@ import com.company.go.domain.billing.Account;
 import com.company.go.domain.billing.PerformanceAccount;
 import com.company.go.domain.billing.ProductAccount;
 import com.company.go.domain.billing.PurchaseOrderAccount;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,15 +20,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AccountService implements AccountUseCase {
 
-    @Autowired
     UpdatePerformanceAccountPort performanceAccountStore;
 
-    @Autowired
     UpdatePurchaseOrderAccountPort purchaseOrderAccountStore;
 
-    @Autowired
     UpdateProductAccountPort productAccountStore;
 
     @Override

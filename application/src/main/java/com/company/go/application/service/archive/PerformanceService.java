@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 public class PerformanceService implements PerformanceUseCase{
     UpdatePerformancePort performanceStore;
 
-    @Autowired
     PerformanceService(UpdatePerformancePort performanceStore){
         this.performanceStore = performanceStore;
     }

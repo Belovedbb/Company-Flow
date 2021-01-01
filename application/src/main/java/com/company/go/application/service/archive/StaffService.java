@@ -30,8 +30,6 @@ public class StaffService implements StaffUseCase {
     RegisterUserUseCase registerUserUseCase;
     UpdateUserPort userPort;
 
-
-    @Autowired
     StaffService(UpdateStaffPort staffStore, UpdateUserPort userPort, RegisterUserUseCase userUseCase){
         this.staffStore = staffStore;
         this.registerUserUseCase = userUseCase;
