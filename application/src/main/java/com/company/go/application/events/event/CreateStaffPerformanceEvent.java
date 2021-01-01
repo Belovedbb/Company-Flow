@@ -73,7 +73,8 @@ public class CreateStaffPerformanceEvent extends ApplicationEvent {
                 //using min-max scaling
                 double minimum = performances.values().stream().min(Long::compareTo).orElseThrow();
                 double maximum = performances.values().stream().max(Long::compareTo).orElseThrow();
-                double performancePercent = ((count - minimum)/(maximum - minimum)) * 100;
+                double performanceValue = (maximum - minimum) == 0d ? 0d : ((count - minimum)/(maximum - minimum));
+                double performancePercent = performanceValue * 100;
                 model.setAverageMonthlyPerformance(performancePercent);
                 model.setStatus(getStatus(performancePercent));
                 performanceUseCase.storePerformance(model);

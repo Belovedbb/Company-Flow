@@ -164,12 +164,14 @@ public class DashBoardService implements DashBoardUseCase {
         LocalDate start = initial.withDayOfYear(1);
         LocalDate endExclusive = initial.withDayOfYear(initial.lengthOfYear()).plusMonths(1);
         Stream<LocalDate> dateInterval = start.datesUntil(endExclusive, Period.ofMonths(1));
-        dateInterval.forEachOrdered(interval -> {
-            List<ProductUseCase.ProductViewModel> filteredProducts = products.stream().filter(product -> {
-                LocalDate currentProduct = LocalDateTime.parse(product.getLastChangedDate(), Utilities.getISODateTimeFormatter()).toLocalDate();
-                return isWithinCustomMonth(currentProduct, interval);
-            }).collect(Collectors.toList());
-            productContainer.put(String.valueOf(interval.getMonthValue()), (long) filteredProducts.size());
+        dateInterval.forEach(interval -> {
+            if(!interval.isEqual(endExclusive.withDayOfMonth(1))) {
+                List<ProductUseCase.ProductViewModel> filteredProducts = products.stream().filter(product -> {
+                    LocalDate currentProduct = LocalDateTime.parse(product.getLastChangedDate(), Utilities.getISODateTimeFormatter()).toLocalDate();
+                    return isWithinCustomMonth(currentProduct, interval);
+                }).collect(Collectors.toList());
+                productContainer.put(String.valueOf(interval.getMonthValue()), (long) filteredProducts.size());
+            }
         });
         return productContainer;
     }
@@ -196,12 +198,14 @@ public class DashBoardService implements DashBoardUseCase {
         LocalDate start = initial.withDayOfYear(1);
         LocalDate endExclusive = initial.withDayOfYear(initial.lengthOfYear()).plusMonths(1);
         Stream<LocalDate> dateInterval = start.datesUntil(endExclusive, Period.ofMonths(1));
-        dateInterval.forEachOrdered(interval -> {
-            List<PurchaseOrderUseCase.PurchaseOrderViewModel> filteredOrders = orders.stream().filter(product -> {
-                LocalDate currentOrder = LocalDateTime.parse(product.getLastChangedDate(), Utilities.getISODateTimeFormatter()).toLocalDate();
-                return isWithinCustomMonth(currentOrder, interval);
-            }).collect(Collectors.toList());
-            productContainer.put(String.valueOf(interval.getMonthValue()), (long) filteredOrders.size());
+        dateInterval.forEach(interval -> {
+            if(!interval.isEqual(endExclusive.withDayOfMonth(1))) {
+                List<PurchaseOrderUseCase.PurchaseOrderViewModel> filteredOrders = orders.stream().filter(product -> {
+                    LocalDate currentOrder = LocalDateTime.parse(product.getLastChangedDate(), Utilities.getISODateTimeFormatter()).toLocalDate();
+                    return isWithinCustomMonth(currentOrder, interval);
+                }).collect(Collectors.toList());
+                productContainer.put(String.valueOf(interval.getMonthValue()), (long) filteredOrders.size());
+            }
         });
         return productContainer;
     }
