@@ -7,7 +7,6 @@ import com.company.go.application.port.in.inventory.ProductUseCase;
 import com.company.go.application.port.in.inventory.PurchaseOrderUseCase;
 import com.company.go.domain.inventory.order.Order;
 import com.company.go.domain.inventory.product.Product;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,14 +26,17 @@ public class DashBoardService implements DashBoardUseCase {
     private final static String weekText = "Last " + LocalDate.now().getDayOfWeek() + " days ";
     private final static String yearText = "Last " + LocalDate.now().getDayOfYear() + " days (" + LocalDate.now().getYear() + ") ";
 
-    @Autowired
-    ProductUseCase productUseCase;
+    private final ProductUseCase productUseCase;
 
-    @Autowired
-    PurchaseOrderUseCase orderUseCase;
+    private final PurchaseOrderUseCase orderUseCase;
 
-    @Autowired
-    PerformanceUseCase performanceUseCase;
+    private final PerformanceUseCase performanceUseCase;
+
+    DashBoardService(ProductUseCase productUseCase, PurchaseOrderUseCase orderUseCase, PerformanceUseCase performanceUseCase){
+        this.productUseCase = productUseCase;
+        this.orderUseCase = orderUseCase;
+        this.performanceUseCase = performanceUseCase;
+    }
 
     @Override
     public List<SummaryWidgetViewModel> getAllSummaries() {
