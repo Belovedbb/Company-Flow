@@ -68,15 +68,14 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.15</version>
-                <configuration>
-                    <properties>
-                        <includeTags>Functional</includeTags>
-                        <includeTags>NonFunctional</includeTags>
-                        <includeTags>Unit</includeTags>
-                        <includeTags>Integration</includeTags>
-                    </properties>
-                </configuration>
+                <version>2.22.2</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                        <version>5.7.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

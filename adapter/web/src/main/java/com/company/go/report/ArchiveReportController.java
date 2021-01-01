@@ -17,11 +17,14 @@ import java.util.Map;
 @RequestMapping("report/archive")
 public class ArchiveReportController {
 
-    @Autowired
     private StaffUseCase staffUseCase;
 
-    @Autowired
     private PerformanceUseCase performanceUseCase;
+
+    ArchiveReportController(StaffUseCase staffUseCase, PerformanceUseCase performanceUseCase){
+        this.staffUseCase = staffUseCase;
+        this.performanceUseCase = performanceUseCase;
+    }
 
     @GetMapping(produces = "application/pdf")
     public void getArchiveReport(HttpServletResponse response) throws IOException, DocumentException {

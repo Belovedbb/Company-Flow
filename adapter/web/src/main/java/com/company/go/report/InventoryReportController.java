@@ -4,7 +4,6 @@ import com.company.go.ControllerUtilities;
 import com.company.go.application.port.in.inventory.ProductUseCase;
 import com.company.go.application.port.in.inventory.PurchaseOrderUseCase;
 import com.itextpdf.text.DocumentException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,11 +16,14 @@ import java.util.Map;
 @RequestMapping("report/inventory")
 public class InventoryReportController {
 
-    @Autowired
-    private ProductUseCase productUseCase;
+    private final ProductUseCase productUseCase;
 
-    @Autowired
-    private PurchaseOrderUseCase purchaseOrderUseCase;
+    private final PurchaseOrderUseCase purchaseOrderUseCase;
+
+    InventoryReportController(ProductUseCase productUseCase, PurchaseOrderUseCase purchaseOrderUseCase){
+        this.productUseCase = productUseCase;
+        this.purchaseOrderUseCase = purchaseOrderUseCase;
+    }
 
     @GetMapping(produces = "application/pdf")
     public void getInventoryReport(HttpServletResponse response) throws IOException, DocumentException {

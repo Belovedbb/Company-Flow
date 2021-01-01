@@ -16,8 +16,11 @@ import java.util.Map;
 @RequestMapping("report/billing")
 public class BillingReportController {
 
-    @Autowired
-    private AccountUseCase accountUseCase;
+    private final AccountUseCase accountUseCase;
+
+    BillingReportController(AccountUseCase accountUseCase){
+        this.accountUseCase = accountUseCase;
+    }
 
     @GetMapping(value = "/account", produces = "application/pdf")
     public void getBillingReport(HttpServletResponse response) throws IOException, DocumentException {

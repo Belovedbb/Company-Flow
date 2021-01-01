@@ -23,7 +23,6 @@ public class AccountController {
 
     private IndexUseCase indexer;
 
-    @Autowired
     public AccountController(IndexUseCase indexer, AccountUseCase accountUseCase) {
         this.indexer = indexer;
         this.accountUseCase = accountUseCase;

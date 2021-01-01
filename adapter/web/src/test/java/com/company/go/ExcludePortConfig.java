@@ -8,6 +8,7 @@ import com.company.go.application.port.out.billing.UpdatePurchaseOrderAccountPor
 import com.company.go.application.port.out.global.UpdateUserPort;
 import com.company.go.application.port.out.inventory.UpdateProductPort;
 import com.company.go.application.port.out.inventory.UpdatePurchaseOrderPort;
+import com.company.go.properties.CompanyProperties;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -31,5 +32,7 @@ public class ExcludePortConfig {
     UpdateProductAccountPort productAccountPort;
     @MockBean
     UpdatePurchaseOrderAccountPort purchaseOrderAccountPort;
+    @MockBean
+    CompanyProperties properties;
 
 }

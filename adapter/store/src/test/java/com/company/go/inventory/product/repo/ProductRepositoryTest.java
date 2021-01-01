@@ -1,6 +1,6 @@
 package com.company.go.inventory.product.repo;
 
-import com.company.go.global.UserEntity;
+import com.company.go.inventory.order.OrderEntity;
 import com.company.go.inventory.product.Constants;
 import com.company.go.inventory.product.ProductEntity;
 import com.company.go.inventory.product.ProductTypeEntity;
@@ -22,12 +22,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityManager;
 import javax.sql.DataSource;
-
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Currency;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -68,15 +67,44 @@ public class ProductRepositoryTest {
 
     @ParameterizedTest
     @MethodSource("getEntityFactory")
-    @DisplayName("Insert product")
-    public void  testInsertProduct(ProductEntity entity){
+    @DisplayName("Insert and get product")
+    public void  testInsertAndGetProduct(ProductEntity entity){
         repository.createProduct(entity);
+        List<ProductEntity> productEntities = repository.getAllRows(ProductEntity.class);
+        Long expectedId = productEntities.get(0).getId();
         ProductEntity productEntity  = repository.getProduct(1L);
         assertNotNull(productEntity);
         assertEquals(productEntity.getName(), entity.getName());
         Long id = repository.getMaxId(ProductEntity.class);
         assertNotNull(id);
-        assertEquals(id, 1L);
+        assertEquals(expectedId, id);
+    }
+
+    @ParameterizedTest
+    @MethodSource("getEntityFactory")
+    @DisplayName("Get all rows")
+    public void testRepoGetAllRows(ProductEntity entity){
+        List<ProductEntity> productEntitiesFirst  = repository.getAllRows(ProductEntity.class);
+        assertNotNull(productEntitiesFirst);
+        assertEquals(0, productEntitiesFirst.size());
+        repository.createProduct(entity);
+        List<ProductEntity> productEntitiesSecond  = repository.getAllRows(ProductEntity.class);
+        assertNotNull(productEntitiesSecond);
+        assertEquals(1, productEntitiesSecond.size());
+    }
+
+    @ParameterizedTest
+    @MethodSource("getEntityFactory")
+    @DisplayName("Delete product")
+    public void testDeleteProduct(ProductEntity entity){
+        repository.createProduct(entity);
+        List<ProductEntity> productEntities  = repository.getAllRows(ProductEntity.class);
+        assertNotNull(productEntities);
+        assertEquals(1, productEntities.size());
+        repository.deleteProduct(productEntities.get(0).getId());
+        productEntities = repository.getAllRows(ProductEntity.class);
+        assertNotNull(productEntities);
+        assertEquals(0, productEntities.size());
     }
 
     private static Stream<Arguments> getEntityFactory(){
