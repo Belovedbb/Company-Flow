@@ -10,13 +10,11 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
+  <a href="https://github.com/belovedbb/Company-Flow">
+    <img src="assets/icon.png" alt="Icon" width="80" height="80">
+  </a>
 
-![Company-Flow icon](assets/icon.png)
-
-</p>
-
-<h2 align="center">Company Flow</h3>
-
+  <h2 align="center">Company Flow</h2>
   <p align="center">
     Company-Flow is a minimalistic web based management tool for company internal workflow
     <br />
@@ -29,7 +27,7 @@
     ·
     <a href="https://github.com/belovedbb/Company-Flow/issues">Request Feature</a>
   </p>
-
+</p>
 
 
 
