@@ -3,8 +3,7 @@
     <a href="https://github.com/Belovedbb/Company-Flow/network/members"><img alt="Fork Project" src="https://img.shields.io/github/forks/belovedbb/Company-Flow.svg" height="20"/></a>
     <a href="https://github.com/belovedbb/Company-Flow/stargazers"><img alt="Star" src="https://img.shields.io/github/stars/belovedbb/Company-Flow.svg" height="20"/></a>
     <a href="https://github.com/belovedbb/Company-Flow/issues"><img alt="Issues" src="https://img.shields.io/github/issues/belovedbb/Company-Flow.svg" height="20"/></a>
-    <a href="https://github.com/belovedbb/Company-Flow/blob/master/LICENSE.txt"><img alt="Project License" src="https://img.shields.io/github/license/belovedbb/Company-Flow.svg" height="20"/></a>
-    <a href="https://linkedin.com/in/othneildrew"><img alt="Linkedin Account" src="https://img.shields.io/badge/-LinkedIn-black.svg?logo=linkedin&colorB=555" height="20"/></a>
+    <a href="https://www.linkedin.com/in/ayooluwa-beloved-65710419a/"><img alt="Linkedin Account" src="https://img.shields.io/badge/-LinkedIn-black.svg?logo=linkedin&colorB=555" height="20"/></a>
 </p>
 
 
@@ -13,6 +12,8 @@
 <p align="center">
 
 ![Company-Flow icon](assets/icon.png)
+
+</p>
 
 <h2 align="center">Company Flow</h3>
 
